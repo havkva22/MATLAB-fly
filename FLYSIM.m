@@ -6,6 +6,7 @@ function FLYSIM
     close all
     
     %% Init Stuff - may be changed
+    lastAlarmTime = -10;
     FRAMES=  60; % 2 ->
     SURFACES = 50; % 4 ->
     firstPerson = true; % Do we start in 1st person view, or not?
@@ -35,7 +36,8 @@ function FLYSIM
     s3 = []; % Surface 3 (Islands 2)
     s4 = []; % Surface 4 (Islands 3)
     sufFlat = []; % Ocean
-    pe = 0;  % Engine Sound  
+    pe = 0;  % Engine Sound
+    pe_1 = 0; %alarm sound
     fig = figure;
     hold on;
     fig.Position = [100 100 700 600]; % Size of program
@@ -179,13 +181,15 @@ function FLYSIM
             int2str(vel), int2str(pos(3)) );
         x = int2str(pos(1)); y = int2str(pos(2));
         txt1.String = sprintf('Coord: (X: %s, Y: %s)', x, y);
+       
     
-        % Check if the height is under 200 meters
-        if (pos(3) < 200)
+        currentTime = toc;
+        if pos(3) < 200 && (currentTime - lastAlarmTime > 5)
             AlarmSound();
+            lastAlarmTime = currentTime; % Update the last alarm time
         end
+       
     end
-
     %% Add Control panels
     function InitControls
         h = [];          
@@ -319,8 +323,8 @@ function FLYSIM
     %% Alarm Sound
     function AlarmSound()
         [ej, fj] = audioread('pull_up.wav');
-        pe = audioplayer(ej, fj);
-        play(pe);  % Play the alarm sound
+        pe_1 = audioplayer(ej, fj);
+        play(pe_1);  % Play the alarm sound
     end
 
     %% Get the Z of the surface given a position
