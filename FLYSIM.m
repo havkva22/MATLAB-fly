@@ -72,6 +72,9 @@ function FLYSIM
         if (kwt < 0) % No more kwh
             pos(3) = z - 100;
         end
+        if (vel < 100) % Velocity under 100
+            pos(3) = z - 100;
+        end
         %Update the plane's vertice new position and rotation
         p1.Vertices = (rot*vert')' + repmat(pos,[size(vert,1),1]); 
         % Check if plane crashes into grounds
@@ -83,7 +86,7 @@ function FLYSIM
         pause(1/FRAMES);
 
         UpdateFuel();
-        ShowInfo();       
+        ShowInfo();
     end
     end        
     %%
@@ -158,7 +161,8 @@ function FLYSIM
             EngineStop();
         else
             kwt = kwt - 0.003 - vel*vel/10000000;
-        end 
+        end
+        
     end
     %% Show Flight Info
     function ShowInfo()
