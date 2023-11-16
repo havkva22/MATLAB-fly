@@ -169,12 +169,19 @@ function FLYSIM
         if (isvalid(fig)==false) 
             return;
         end
+    
         txtKwh.String = "KWh : " + int2str(kwt);  
         txt2.String = sprintf('Speed: %s  Height: %s', ...
             int2str(vel), int2str(pos(3)) );
         x = int2str(pos(1)); y = int2str(pos(2));
         txt1.String = sprintf('Coord: (X: %s, Y: %s)', x, y);
-    end    
+    
+        % Check if the height is under 200 meters
+        if (pos(3) < 200)
+            AlarmSound();
+        end
+    end
+
     %% Add Control panels
     function InitControls
         h = [];          
@@ -279,11 +286,18 @@ function FLYSIM
     end    
     %% Crash Sound
     function Crash()
-        [xs,f] = audioread('crash_sound.wav');
-        pe = audioplayer(xs,f);
-        play(pe);  
-        p1.FaceColor = "Black";       
+        [eb, fb] = audioread('crash_sound.wav');
+        pe = audioplayer(eb, fb);
+        play(pe);  % Play the alarm sound
     end
+
+    %% Alarm Sound
+    function AlarmSound()
+        [ej, fj] = audioread('pull_up.wav');
+        pe = audioplayer(ej, fj);
+        play(pe);  % Play the alarm sound
+    end
+
     %% Get the Z of the surface given a position
     function z0 = GetZ(s, pos)
         z0 = interp2(s.XData,s.YData,s.ZData,pos(1),pos(2) );
