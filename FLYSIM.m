@@ -234,7 +234,8 @@ function FLYSIM
          if (key=='v')
              firstPerson = ~firstPerson;
          elseif (key=='p') % Speed 
-             vel = max(5, vel * 1.05);
+             newVel = vel * 1.05;
+             vel = max(5, min(newVel, 1500));
          elseif (key=='m') % Slow down
              vel = vel * 0.95;
          elseif (key=='q')
