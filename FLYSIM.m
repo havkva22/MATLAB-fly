@@ -1,5 +1,5 @@
-% Taster:  QE: Venstre/Høyre  AD rulle  
-% W S Opp/Ned  P/M : Øk/Sent hastighet
+% Taster:  QE: Venstre/HÃ¸yre  AD rulle  
+% W S Opp/Ned  P/M : Ã˜k/Sent hastighet
 % V - Endre Observarsjonspunkt
 function FLYSIM
     %% Intro stuff
@@ -19,6 +19,7 @@ function FLYSIM
     textureDesert = imread('Island.jpg');
     textureSea = imread('NewSea.jpg');
     textureForrest = imread('forrest.jpg');
+    currentTexture = 'sea';
         
     %% Other variables
     matRot   = eye(3);
@@ -29,8 +30,11 @@ function FLYSIM
     txt2 = 0;        % Control height
     pos = posStart;
     rot = matRot;
-    s1 = []; % Surface 1
-    s2 = []; % Surface 2
+    s1 = []; % Surface 1 (Islands 1)
+    s2 = []; % Surface 2 (Forrest)
+    s3 = []; % Surface 3 (Islands 2)
+    s4 = []; % Surface 4 (Islands 3)
+    sufFlat = []; % Ocean
     pe = 0;  % Engine Sound  
     fig = figure;
     hold on;
@@ -114,19 +118,19 @@ function FLYSIM
         x = x * 2000+9000;
         y = y * 7000+30000;
         z = z * 1900 - 1800;
-        s1=surf(x,y,z, ...
+        s3=surf(x,y,z, ...
                'LineStyle','none','AmbientStrength',0.7);
-        s1.FaceColor = 'texturemap';
-        s1.CData = textureDesert;
+        s3.FaceColor = 'texturemap';
+        s3.CData = textureDesert;
    
           [x,y,z] = peaks(SURFACES);
         x = x * 2000-9000;
         y = y * 7000-30000;
         z = z * 1900 - 1800;
-        s1=surf(x,y,z, ...
+        s4=surf(x,y,z, ...
                'LineStyle','none','AmbientStrength',0.7);
-        s1.FaceColor = 'texturemap';
-        s1.CData = textureDesert;
+        s4.FaceColor = 'texturemap';
+        s4.CData = textureDesert;
 
         %% Define a forrest island
         x = -2:2/sqrt(SURFACES):2;
@@ -250,6 +254,27 @@ function FLYSIM
              matRot = MR(0, 0, 0.05);
          elseif (key=='d')
              matRot = MR(0, 0, -0.05);
+	 elseif (key=='b')
+             if strcmp(currentTexture, 'sea')
+                 textureDesert = imread("NewMountain.jpg");
+                 textureSea = imread("NewDesert.jpg");
+                 currentTexture = 'desert';
+             elseif strcmp(currentTexture, 'desert')
+                 textureDesert = imread("Iceberg.jpg");
+                 textureSea = imread("NewIce.jpg");
+                 currentTexture = 'snow';
+             elseif strcmp(currentTexture, 'snow')
+                 textureDesert = imread("Island.jpg");
+                 textureSea = imread("NewSea.jpg");
+                 currentTexture = 'sea';
+                 
+             end
+
+             s1.CData = textureDesert;
+             sufFlat.CData = textureSea;
+             s3.CData = textureDesert;
+             s4.CData = textureDesert;
+      
          end           
     end
     %% Trap Key Release
