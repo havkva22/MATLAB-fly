@@ -38,6 +38,7 @@ function FLYSIM
     sufFlat = []; % Ocean
     pe = 0;  % Engine Sound
     pe_1 = 0; %alarm sound
+    ftw = false;
     fig = figure;
     hold on;
     fig.Position = [100 100 700 600]; % Size of program
@@ -103,13 +104,18 @@ function FLYSIM
              fTC = false;
              if pos(3) < 0
                  vel = 0;
-                 fTC = false;
+                 ftw = true;
              end
         elseif  z < 0  || z < GetZ(s1, pos) || z < GetZ(s2,pos)
-             Crash();
-             fTC= true;
+             if ftw == false
+                Crash();
+                fTC= true;
+             else
+                fTC = false;
+             end
         else   
              fTC = false;
+             ftw = false;
         end
     end
     %% Add some Islands
