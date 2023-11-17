@@ -79,7 +79,7 @@ function FLYSIM
         if (kwt < 0) % No more kwh
             pos(3) = z - 100;
         end
-        if (vel < 100) % Velocity under 100
+        if (vel < 100 && ftw == false) % Velocity under 100, not in landing sequence
             pos(3) = z - 100;
         end
         %Update the plane's vertice new position and rotation
