@@ -98,11 +98,18 @@ function FLYSIM
     %%
     function [fTC]= TestCrash()
         z = pos(3)-20;
-        if  z < 0  || z < GetZ(s1, pos) || z < GetZ(s2,pos)
+        if vel >= 100 && vel <= 200 && abs(rot(1, 3)) < deg2rad(15)
+        % Conditions for a successful landing
+             fTC = false;
+             if pos(3) < 0
+                 vel = 0;
+                 fTC = false;
+             end
+        elseif  z < 0  || z < GetZ(s1, pos) || z < GetZ(s2,pos)
              Crash();
              fTC= true;
         else   
-             fTC=false;
+             fTC = false;
         end
     end
     %% Add some Islands
