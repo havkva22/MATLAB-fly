@@ -317,7 +317,8 @@ function FLYSIM
     function Crash()
         [eb, fb] = audioread('crash_sound.wav');
         pe = audioplayer(eb, fb);
-        play(pe);  % Play the alarm sound
+        play(pe);
+	p1.FaceColor = "Black";
     end
 
     %% Alarm Sound
